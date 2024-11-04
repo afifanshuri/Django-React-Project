@@ -28,7 +28,8 @@ const AuthForm = ({ route, method }) => {
                 navigate("/login")
             }
         } catch (e) {
-            alert("Wrong credentials!")
+            alert("Something went wrong!")
+            setLoading(false);
         } finally {
 
         }
@@ -47,7 +48,7 @@ const AuthForm = ({ route, method }) => {
                         <Input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Enter password here"></Input>
                     </Field>
                     {loading && <LoadingIndicator/>}
-                    <Button onClick={onClickSubmit}>Log In</Button>
+                    <Button onClick={onClickSubmit}>{method === "login" ? "Log In" : "Sign Up"}</Button>
                 </VStack>
             </Card.Root>
         </>
