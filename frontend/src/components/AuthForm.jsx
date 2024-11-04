@@ -4,6 +4,7 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import api from "../api"
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants"
+import LoadingIndicator from "./LoadingIndicator"
 
 const AuthForm = ({ route, method }) => {
 
@@ -45,7 +46,7 @@ const AuthForm = ({ route, method }) => {
                     <Field label="Password">
                         <Input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Enter password here"></Input>
                     </Field>
-
+                    {loading && <LoadingIndicator/>}
                     <Button onClick={onClickSubmit}>Log In</Button>
                 </VStack>
             </Card.Root>

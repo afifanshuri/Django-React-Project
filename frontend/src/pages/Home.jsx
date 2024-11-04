@@ -18,16 +18,16 @@ function Home() {
     const [currentUser, setCurrentUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    const getPostList = () => {
-        api
+    const getPostList = async () => {
+        await api
             .get("/api/posts/")
             .then((res) => res.data)
             .then((data) => { setPostList(data) })
             .catch((e) => alert(e));
     }
 
-    const getUsersList = () => {
-        api
+    const getUsersList = async () => {
+        await api
             .get("/api/users/view/")
             .then((res) => res.data)
             .then((data) => { setUsersList(data) })
@@ -58,7 +58,7 @@ function Home() {
 
     const onClickSendComment = async (postId) => {
         const comment = { id: postId, content: commentToSubmit[postId] };
-        api.post(`/api/comment/create/`, comment)
+        await api.post(`/api/comment/create/`, comment)
             .then((res) => {
                 if (res.status === 201 || res.status === 200) {
                     getCommentsListByPost();
@@ -70,7 +70,7 @@ function Home() {
     }
 
     const onClickDeleteComment = async (commentId) => {
-        api.delete(`/api/comment/delete/${commentId}/`)
+        await api.delete(`/api/comment/delete/${commentId}/`)
             .then((res) => {
                 if (res.status === 204) {
                     alert("Succesfully deleted comment")
@@ -83,7 +83,7 @@ function Home() {
 
     const onClickEditComment = async (commentId) => {
         const comment = { id: commentId, content: commentToEdit[commentId] };
-        api.put(`/api/comment/update/${commentId}/`, comment)
+        await api.put(`/api/comment/update/${commentId}/`, comment)
             .then((res) => {
                 if (res.status === 201 || res.status === 200) {
                     getCommentsListByPost();
@@ -113,13 +113,12 @@ function Home() {
     }, [])
 
     useEffect(() => {
-        if (postList.length !== 0) {
+        if (postList && postList.length !== 0) {
             getUsersWhoPosted();
-            getCommentsListByPost();   
-            setLoading(false);
-        } else {
-            setLoading(false);
+            getCommentsListByPost();  
         }
+
+        setLoading(false);
     }, [postList]);
 
     return (
@@ -157,7 +156,7 @@ function Home() {
                                                                 return (
                                                                     <Container style={{ textAlign: "left", marginBottom: '10px' }} key={comment.id} w={'100%'}>
                                                                         <Text>{commenter ? (authorIsCommenter ? "You" : commenter.username) + ": " : "Anon: "} </Text>
-                                                                        <Input disabled py={2} px={4} as={EditableInput} placeholder="Add A Comment" w={'100%'} value={comment.content} onChange={(e) => setCommentToSubmit(prev => ({ ...prev, [post.id]: e.target.value }))} />
+                                                                        <Text  py={2} px={4}  w={'100%'} flexWrap={"wrap"} border={'solid 0.5px rgb(39, 39, 42)'}>{comment.content}</Text>
 
 
                                                                         <div style={{ display: authorIsCommenter ? "inline-flex" : "none", marginTop: '10px' }}>
